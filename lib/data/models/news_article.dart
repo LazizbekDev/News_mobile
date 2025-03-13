@@ -28,4 +28,6 @@ class NewsArticle {
       content: json['content'],
     );
   }
+
+  get source => null;
 }

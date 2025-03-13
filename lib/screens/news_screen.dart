@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app/logic/bloc/news_bloc.dart';
-import 'package:news_app/widgets/news_card.dart';
+// import 'package:news_app/widgets/news_card.dart';
+import 'package:news_app/widgets/news_item.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -50,12 +51,14 @@ class _NewsScreenState extends State<NewsScreen> {
         child: BlocBuilder<NewsBloc, NewsState>(
           builder: (context, state) {
             if (state is NewsLoading) {
-              return const Text("Loading...");
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             } else if (state is NewsLoaded) {
               return ListView.builder(
                 itemCount: state.articles.length,
                 itemBuilder: (context, index) {
-                  return NewsCard(article: state.articles[index]);
+                  return NewsItem(article: state.articles[index]);
                 },
               );
             } else if (state is NewsError) {
@@ -71,7 +74,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read<NewsBloc>().add(
-              FetchNews("jeffrey dahmer"),
+              FetchNews("jeffrey dammer"),
             ),
         child: const Icon(Icons.refresh),
       ),
