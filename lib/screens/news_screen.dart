@@ -11,13 +11,20 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     context.read<NewsBloc>().add(FetchNews("latest"));
   }
 
+  void _fetchNews(String query) {
+    context.read<NewsBloc>().add(FetchNews(query));
+  }
+
   Future<void> _refreshNews() async {
+    _searchController.text = "";
     context.read<NewsBloc>().add(FetchNews("latest"));
   }
 
@@ -25,7 +32,18 @@ class _NewsScreenState extends State<NewsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("The New York Times"),
+        title: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: "Search news...",
+            border: InputBorder.none,
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () => _fetchNews(_searchController.text),
+            ),
+          ),
+          onSubmitted: (query) => _fetchNews(query),
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: _refreshNews,
