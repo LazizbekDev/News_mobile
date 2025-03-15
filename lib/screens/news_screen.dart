@@ -40,7 +40,7 @@ class _NewsScreenState extends State<NewsScreen> {
             border: InputBorder.none,
             suffixIcon: IconButton(
               icon: const Icon(Icons.search),
-              onPressed: () => _fetchNews(_searchController.text),
+              onPressed: () => _fetchNews(_searchController.text.isEmpty ? "latest" : _searchController.text),
             ),
           ),
           onSubmitted: (query) => _fetchNews(query),
@@ -74,7 +74,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.read<NewsBloc>().add(
-              FetchNews("jeffrey dammer"),
+              FetchNews("latest"),
             ),
         child: const Icon(Icons.refresh),
       ),
