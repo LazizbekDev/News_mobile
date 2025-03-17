@@ -1,12 +1,14 @@
 import 'dart:convert';
 // import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:news_app/data/models/news_response.dart';
 
 class NewsRepository {
-  static const String apiKey = "25cea407e57d4134a19f2dac873abfea";
-  static const String baseUrl = "https://newsapi.org/v2/everything";
+  final String apiKey = dotenv.env['API_KEY'] ?? "";
+  final String baseUrl = dotenv.env['BASE_URL'] ?? "";
+  // static const String baseUrl = "https://newsapi.org/v2/everything";
 
   Future<NewsResponse> fetchNews(String query) async {
     final String today = DateFormat('yyyy-MM-dd')
