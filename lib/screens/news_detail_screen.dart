@@ -16,10 +16,10 @@ class NewsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String formattedDate = "Unknown Date";
-    DateTime dateTime = DateTime.parse(article.publishedAt);
+    DateTime dateTime = article.publishedAt;
     formattedDate = DateFormat('yyyy-MM-DD HH:mm').format(dateTime);
     return Scaffold(
-      appBar: AppBar(title: Text(article.source?.name ?? "News Source")),
+      appBar: AppBar(title: const Text("News Source")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

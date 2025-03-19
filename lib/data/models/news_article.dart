@@ -1,10 +1,17 @@
+import 'package:isar/isar.dart';
+
+part 'news_article.g.dart';
+
+@Collection()
 class NewsArticle {
+  Id id = Isar.autoIncrement;
+
   final String? author;
   final String title;
   final String? description;
   final String url;
   final String? urlToImage;
-  final String publishedAt;
+  final DateTime publishedAt;
   final String? content;
 
   NewsArticle({
@@ -15,6 +22,7 @@ class NewsArticle {
     this.urlToImage,
     required this.publishedAt,
     this.content,
+    this.id = Isar.autoIncrement,
   });
 
   factory NewsArticle.fromJson(Map<String, dynamic> json) {
@@ -24,10 +32,26 @@ class NewsArticle {
       description: json['description'],
       url: json['url'] ?? "",
       urlToImage: json['urlToImage'],
-      publishedAt: json['publishedAt'] ?? "",
+      publishedAt: DateTime.parse(json['publishedAt']),
       content: json['content'],
     );
   }
 
-  get source => null;
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'author': author,
+      'title': title,
+      'description': description,
+      'url': url,
+      'urlToImage': urlToImage,
+      'publishedAt': publishedAt.toIso8601String(),
+      'content': content,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'NewsArticle(id: $id, title: $title, url: $url, publishedAt: $publishedAt)';
+  }
 }

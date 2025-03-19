@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app/data/local/news_api_service.dart';
+// import 'package:news_app/data/models/news_article.dart';
 import 'package:news_app/logic/bloc/news_bloc.dart';
 // import 'package:news_app/widgets/news_card.dart';
 import 'package:news_app/widgets/news_item.dart';
+import 'package:news_app/widgets/sidebar.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({super.key});
@@ -29,9 +32,30 @@ class _NewsScreenState extends State<NewsScreen> {
     context.read<NewsBloc>().add(FetchNews("latest"));
   }
 
+  void testIsar() async {
+    final isarService = IsarService();
+
+    // final article = NewsArticle(
+    //   title: "Test News",
+    //   url: "https://example.com",
+    //   publishedAt: DateTime.now(),
+    // );
+
+    // await isarService.saveArticle(article);
+    // debugPrint("Yangilik saqlandi!");
+
+    final articles = await isarService.fetchArticles();
+    debugPrint("Saved News: $articles");
+
+    for (var a in articles) {
+      debugPrint("Title: ${a.title}. URL: ${a.url}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const Sidebar(),
       appBar: AppBar(
         title: TextField(
           controller: _searchController,
@@ -75,9 +99,7 @@ class _NewsScreenState extends State<NewsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.read<NewsBloc>().add(
-              FetchNews("latest"),
-            ),
+        onPressed: () => testIsar(),
         child: const Icon(Icons.refresh),
       ),
     );
