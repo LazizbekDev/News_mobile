@@ -12,6 +12,7 @@ class NewsLoaded extends NewsState {
   NewsLoaded(this.articles);
 }
 
+
 class NewsError extends NewsState {
   final String message;
   NewsError(this.message);

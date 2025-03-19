@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app/data/local/news_api_service.dart';
-// import 'package:news_app/data/models/news_article.dart';
-import 'package:news_app/logic/bloc/news_bloc.dart';
-// import 'package:news_app/widgets/news_card.dart';
+import 'package:news_app/logic/local_news_bloc/local_news_bloc.dart';
+import 'package:news_app/logic/news_block/news_bloc.dart';
+import 'package:news_app/widgets/local_news_carousel.dart';
 import 'package:news_app/widgets/news_item.dart';
 import 'package:news_app/widgets/sidebar.dart';
 
@@ -20,6 +19,7 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<LocalNewsBloc>().add(LoadLocalNews());
     context.read<NewsBloc>().add(FetchNews("latest"));
   }
 
@@ -30,26 +30,6 @@ class _NewsScreenState extends State<NewsScreen> {
   Future<void> _refreshNews() async {
     _searchController.text = "";
     context.read<NewsBloc>().add(FetchNews("latest"));
-  }
-
-  void testIsar() async {
-    final isarService = IsarService();
-
-    // final article = NewsArticle(
-    //   title: "Test News",
-    //   url: "https://example.com",
-    //   publishedAt: DateTime.now(),
-    // );
-
-    // await isarService.saveArticle(article);
-    // debugPrint("Yangilik saqlandi!");
-
-    final articles = await isarService.fetchArticles();
-    debugPrint("Saved News: $articles");
-
-    for (var a in articles) {
-      debugPrint("Title: ${a.title}. URL: ${a.url}");
-    }
   }
 
   @override
@@ -81,11 +61,24 @@ class _NewsScreenState extends State<NewsScreen> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is NewsLoaded) {
-              return ListView.builder(
-                itemCount: state.articles.length,
-                itemBuilder: (context, index) {
-                  return NewsItem(article: state.articles[index]);
-                },
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const LocalNewsCarousel(),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: state.articles.length,
+                      itemBuilder: (context, index) {
+                        return NewsItem(article: state.articles[index]);
+                      },
+                    ),
+                  ),
+                ],
               );
             } else if (state is NewsError) {
               return Center(
@@ -99,7 +92,7 @@ class _NewsScreenState extends State<NewsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => testIsar(),
+        onPressed: _refreshNews,
         child: const Icon(Icons.refresh),
       ),
     );

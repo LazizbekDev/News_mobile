@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:news_app/logic/bloc/news_bloc.dart';
-import 'package:news_app/data/models/news_article.dart';
-import 'package:news_app/logic/bloc/news_bloc.dart';
+import 'package:news_app/data/models/local_news_article.dart';
+import 'package:news_app/logic/local_news_bloc/local_news_bloc.dart';
+import 'package:news_app/widgets/local_news_carousel.dart';
 
 class ManageNewsScreen extends StatefulWidget {
   const ManageNewsScreen({super.key});
@@ -17,6 +14,13 @@ class ManageNewsScreen extends StatefulWidget {
 class _ManageNewsScreenState extends State<ManageNewsScreen> {
   final _titleController = TextEditingController();
   final _urlController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("ManageNewsScreen - dispatching LoadLocalNews");
+    context.read<LocalNewsBloc>().add(LoadLocalNews());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +45,12 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
                 final title = _titleController.text.trim();
                 final url = _urlController.text.trim();
                 if (title.isNotEmpty && url.isNotEmpty) {
-                  final article = NewsArticle(
+                  final article = LocalNewsArticle(
                     title: title,
                     url: url,
-                    publishedAt: DateTime.now(),
+                    publishedAt: DateTime.now().toIso8601String(),
                   );
-                  debugPrint(jsonEncode(article));
-                  context.read<NewsBloc>().add(AddNews(article));
+                  context.read<LocalNewsBloc>().add(AddNews(article));
                   _titleController.clear();
                   _urlController.clear();
                 }
@@ -55,33 +58,7 @@ class _ManageNewsScreenState extends State<ManageNewsScreen> {
               child: const Text("Add News"),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: BlocBuilder<NewsBloc, NewsState>(
-                builder: (context, state) {
-                  if (state is NewsLoaded) {
-                    return ListView.builder(
-                      itemCount: state.articles.length,
-                      itemBuilder: (context, index) {
-                        final article = state.articles[index];
-                        return ListTile(
-                          title: Text(article.title),
-                          subtitle: Text(article.url),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              context.read<NewsBloc>().add(
-                                    DeleteNews(article.id),
-                                  );
-                            },
-                          ),
-                        );
-                      },
-                    );
-                  }
-                  return const Center(child: CircularProgressIndicator());
-                },
-              ),
-            ),
+            const LocalNewsCarousel(),
           ],
         ),
       ),

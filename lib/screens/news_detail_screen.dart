@@ -27,8 +27,9 @@ class NewsDetailScreen extends StatelessWidget {
           children: [
             if (article.urlToImage != null)
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
                 child: Image.network(
                   article.urlToImage ?? "",
                   height: 180,
@@ -38,8 +39,11 @@ class NewsDetailScreen extends StatelessWidget {
                     return Container(
                       height: 180,
                       color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported,
-                          size: 150, color: Colors.grey),
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        size: 150,
+                        color: Colors.grey,
+                      ),
                     );
                   },
                 ),
