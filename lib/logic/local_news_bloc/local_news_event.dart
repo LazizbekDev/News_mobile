@@ -13,4 +13,9 @@ class DeleteNews extends LocalNewsEvent {
   DeleteNews(this.id);
 }
 
+class UpdateNews extends LocalNewsEvent {
+  final LocalNewsArticle updatedArticle;
+  UpdateNews(this.updatedArticle);
+}
+
 class LoadLocalNews extends LocalNewsEvent {}

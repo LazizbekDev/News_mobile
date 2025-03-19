@@ -36,6 +36,12 @@ class IsarService {
     });
   }
 
+  Future<void> updateArticle(LocalNewsArticle updatedArticle) async {
+    await isar.writeTxn(() async {
+      await isar.localNewsArticles.put(updatedArticle);
+    });
+  }
+
   Future<void> deleteArticle(int id) async {
     await isar.writeTxn(() async {
       await isar.localNewsArticles.delete(id);

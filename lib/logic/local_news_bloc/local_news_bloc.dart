@@ -31,6 +31,16 @@ class LocalNewsBloc extends Bloc<LocalNewsEvent, LocalNewsState> {
       }
     });
 
+    on<UpdateNews>((UpdateNews event, emit) async {
+      try {
+        await isarService.updateArticle(event.updatedArticle);
+        final articles = await isarService.fetchArticles();
+        emit(LocalNewsLoaded(articles));
+      } catch (e) {
+        emit(LocalNewsError("Error: $e"));
+      }
+    });
+
     on<DeleteNews>((DeleteNews event, emit) async {
       try {
         await isarService.deleteArticle(event.id);

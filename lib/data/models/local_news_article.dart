@@ -1,6 +1,5 @@
 import 'package:isar/isar.dart';
 import 'package:news_app/data/models/news_article.dart';
-
 part 'local_news_article.g.dart';
 
 @Collection()
@@ -29,5 +28,22 @@ class LocalNewsArticle {
       imageUrl: article.urlToImage,
       publishedAt: article.publishedAt.toIso8601String(),
     );
+  }
+
+  LocalNewsArticle copyWith({
+    int? id,
+    String? title,
+    String? description,
+    String? url,
+    String? imageUrl,
+    String? publishedAt,
+  }) {
+    return LocalNewsArticle(
+      title: title ?? this.title,
+      description: description ?? this.description,
+      url: url ?? this.url,
+      imageUrl: imageUrl ?? this.imageUrl,
+      publishedAt: publishedAt ?? this.publishedAt,
+    )..id = id ?? this.id;
   }
 }

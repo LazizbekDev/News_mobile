@@ -63,13 +63,23 @@ class _NewsScreenState extends State<NewsScreen> {
             } else if (state is NewsLoaded) {
               return Column(
                 children: [
-                  const SizedBox(
-                    height: 10,
+                  const SizedBox(height: 10),
+                  BlocBuilder<LocalNewsBloc, LocalNewsState>(
+                    builder: (context, localState) {
+                      if (localState is LocalNewsLoaded) {
+                        return LocalNewsCarousel(
+                          articles: localState.articles,
+                          isManageMode: false,
+                        );
+                      } else if (localState is LocalNewsLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else {
+                        return const Center(
+                            child: Text("No local news"));
+                      }
+                    },
                   ),
-                  const LocalNewsCarousel(),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Expanded(
                     child: ListView.builder(
                       itemCount: state.articles.length,
